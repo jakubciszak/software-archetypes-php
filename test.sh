@@ -1,0 +1,1 @@
+docker run --rm -v ./app:/var/www/html -u www-data -it software-archetypes-php-app php vendor/bin/phpunit
