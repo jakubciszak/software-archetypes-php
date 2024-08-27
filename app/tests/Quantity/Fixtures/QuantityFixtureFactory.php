@@ -1,10 +1,10 @@
 <?php
 
-namespace SoftwareArchetypesPhp\TestsQuantityFixtures;
+namespace SoftwareArchetypesPhp\Tests\Quantity\Fixtures;
 
-use SoftwareArchetypesPhp\Quantity\Domain\Metric;
-use SoftwareArchetypesPhp\Quantity\Domain\Quantity;
-use SoftwareArchetypesPhp\Quantity\Domain\RoundingPolicy;
+use SoftwareArchetypesPhp\Quantity\Metric;
+use SoftwareArchetypesPhp\Quantity\Quantity;
+use SoftwareArchetypesPhp\Quantity\RoundingPolicy;
 
 class QuantityFixtureFactory
 {

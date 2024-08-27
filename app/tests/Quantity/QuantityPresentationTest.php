@@ -1,10 +1,11 @@
 <?php
 
-namespace Quantity\Domain;
+namespace SoftwareArchetypesPhp\Tests\Quantity;
+
 use PHPUnit\Framework\TestCase;
-use SoftwareArchetypesPhp\TestsQuantityFixtures\MetricFixtureFactory;
-use SoftwareArchetypesPhp\TestsQuantityFixtures\QuantityFixtureFactory;
-use SoftwareArchetypesPhp\TestsQuantityFixtures\RoundingPolicyFixtureFactory;
+use SoftwareArchetypesPhp\Tests\Quantity\Fixtures\MetricFixtureFactory;
+use SoftwareArchetypesPhp\Tests\Quantity\Fixtures\QuantityFixtureFactory;
+use SoftwareArchetypesPhp\Tests\Quantity\Fixtures\RoundingPolicyFixtureFactory;
 
 class QuantityPresentationTest extends TestCase
 {

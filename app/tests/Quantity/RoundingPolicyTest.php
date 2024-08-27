@@ -1,11 +1,11 @@
 <?php
 
-namespace Quantity\Domain;
+namespace SoftwareArchetypesPhp\Tests\Quantity;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use SoftwareArchetypesPhp\Quantity\Domain\RoundingPolicy;
 use PHPUnit\Framework\TestCase;
-use SoftwareArchetypesPhp\Quantity\Domain\RoundingStrategy;
+use SoftwareArchetypesPhp\Quantity\RoundingPolicy;
+use SoftwareArchetypesPhp\Quantity\RoundingStrategy;
 
 class RoundingPolicyTest extends TestCase
 {
