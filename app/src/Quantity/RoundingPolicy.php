@@ -1,6 +1,6 @@
 <?php
 
-namespace SoftwareArchetypesPhp\Quantity\Domain;
+namespace SoftwareArchetypesPhp\Quantity;
 
 final readonly class RoundingPolicy
 {

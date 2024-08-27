@@ -1,14 +1,19 @@
 <?php
 
-namespace SoftwareArchetypesPhp\Quantity\Domain;
+namespace SoftwareArchetypesPhp\Quantity;
 
 readonly class Quantity
 {
     public function __construct(
-        public float $amount,
-        private Metric $metric,
-        private RoundingPolicy $roundingPolicy
+        protected float $amount,
+        protected Metric $metric,
+        protected RoundingPolicy $roundingPolicy
     ) {
+    }
+
+    public function amount(): float
+    {
+        return $this->amount;
     }
 
     public function add(Quantity $quantity): static
@@ -81,6 +86,6 @@ readonly class Quantity
 
     public function symbol(): string
     {
-        return $this->metric->symbol;
+        return $this->metric->symbol();
     }
 }

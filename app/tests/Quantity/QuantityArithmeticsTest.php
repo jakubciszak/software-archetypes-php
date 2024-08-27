@@ -1,10 +1,10 @@
 <?php
 
-namespace Quantity\Domain;
+namespace SoftwareArchetypesPhp\Tests\Quantity;
 
 use PHPUnit\Framework\TestCase;
-use SoftwareArchetypesPhp\TestsQuantityFixtures\MetricFixtureFactory;
-use SoftwareArchetypesPhp\TestsQuantityFixtures\QuantityFixtureFactory;
+use SoftwareArchetypesPhp\Tests\Quantity\Fixtures\MetricFixtureFactory;
+use SoftwareArchetypesPhp\Tests\Quantity\Fixtures\QuantityFixtureFactory;
 
 class QuantityArithmeticsTest extends TestCase
 {
@@ -15,7 +15,7 @@ class QuantityArithmeticsTest extends TestCase
 
         $result = $quantity->add($quantityToAdd);
 
-        $this->assertEquals(15, $result->amount);
+        $this->assertEquals(15, $result->amount());
     }
 
     public function testSubtract(): void
@@ -25,7 +25,7 @@ class QuantityArithmeticsTest extends TestCase
 
         $result = $quantity->subtract($quantityToSubtract);
 
-        $this->assertEquals(5, $result->amount);
+        $this->assertEquals(5, $result->amount());
     }
 
     public function testMultiply(): void
@@ -35,13 +35,13 @@ class QuantityArithmeticsTest extends TestCase
 
         $result = $quantity->multiply($multiplier);
 
-        $this->assertEquals(50, $result->amount);
+        $this->assertEquals(50, $result->amount());
 
         $multiplier = QuantityFixtureFactory::get(5);
 
         $result = $quantity->multiply($multiplier);
 
-        $this->assertEquals(50, $result->amount);
+        $this->assertEquals(50, $result->amount());
 
         $newQuantity = QuantityFixtureFactory::get(number: 5, metric: MetricFixtureFactory::get('meter', 'm', ''));
 
@@ -56,13 +56,13 @@ class QuantityArithmeticsTest extends TestCase
 
         $result = $quantity->divide($divisor);
 
-        $this->assertEquals(2, $result->amount);
+        $this->assertEquals(2, $result->amount());
 
         $divisor = QuantityFixtureFactory::get(5);
 
         $result = $quantity->divide($divisor);
 
-        $this->assertEquals(2, $result->amount);
+        $this->assertEquals(2, $result->amount());
 
         $newQuantity = QuantityFixtureFactory::get(number: 5, metric: MetricFixtureFactory::get('meter', 'm', ''));
 

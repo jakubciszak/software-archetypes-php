@@ -1,9 +1,9 @@
 <?php
 
-namespace SoftwareArchetypesPhp\TestsQuantityFixtures;
+namespace SoftwareArchetypesPhp\Tests\Quantity\Fixtures;
 
-use SoftwareArchetypesPhp\Quantity\Domain\RoundingPolicy;
-use SoftwareArchetypesPhp\Quantity\Domain\RoundingStrategy;
+use SoftwareArchetypesPhp\Quantity\RoundingPolicy;
+use SoftwareArchetypesPhp\Quantity\RoundingStrategy;
 
 final readonly class RoundingPolicyFixtureFactory
 {
