@@ -9,7 +9,7 @@ Some examples of software archetypes in PHP.
 
 ### Money
 `[EP], Chapter 11`, \
-[<img src="docs/money.png" alt="Money diagram" width="550"/>)](docs/money.png)
+[<img src="docs/money.png" alt="Money diagram" width="550"/>](docs/money.png)
 
 ### Price (in progress)
 `[EP], Chapter 7.22`
