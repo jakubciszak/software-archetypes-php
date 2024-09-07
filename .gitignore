@@ -2,3 +2,4 @@ docker/.env.override
 app/.phpunit.result.cache
 vendor/
 .idea/
+/app/.phpunit.cache/
