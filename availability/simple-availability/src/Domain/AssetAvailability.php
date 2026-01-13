@@ -19,11 +19,11 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetWithdrawn;
 
 class AssetAvailability
 {
-    private const ASSET_LOCKED_REASON = 'ASSET_CURRENTLY_LOCKED';
-    private const NO_LOCK_ON_THE_ASSET_REASON = 'NO_LOCK_ON_THE_ASSET';
-    private const NO_LOCK_DEFINED_FOR_OWNER_REASON = 'NO_LOCK_DEFINED_FOR_OWNER';
-    private const ASSET_ALREADY_ACTIVATED_REASON = 'ASSET_ALREADY_ACTIVATED';
-    private const INDEFINITE_LOCK_DAYS = 365;
+    private const string ASSET_LOCKED_REASON = 'ASSET_CURRENTLY_LOCKED';
+    private const string NO_LOCK_ON_THE_ASSET_REASON = 'NO_LOCK_ON_THE_ASSET';
+    private const string NO_LOCK_DEFINED_FOR_OWNER_REASON = 'NO_LOCK_DEFINED_FOR_OWNER';
+    private const string ASSET_ALREADY_ACTIVATED_REASON = 'ASSET_ALREADY_ACTIVATED';
+    private const int INDEFINITE_LOCK_DAYS = 365;
 
     private ?Lock $currentLock;
 

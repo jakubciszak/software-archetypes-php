@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class Unlock implements Command
 {
-    public const TYPE = 'UNLOCK';
+    public const string TYPE = 'UNLOCK';
 
     public function __construct(
         public string $assetId

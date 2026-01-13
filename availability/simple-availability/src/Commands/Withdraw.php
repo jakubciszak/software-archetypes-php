@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class Withdraw implements Command
 {
-    public const TYPE = 'WITHDRAW';
+    public const string TYPE = 'WITHDRAW';
 
     public function __construct(
         public string $assetId

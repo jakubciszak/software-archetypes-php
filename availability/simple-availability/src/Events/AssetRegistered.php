@@ -8,7 +8,7 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 
 final readonly class AssetRegistered extends BaseDomainEvent
 {
-    public const TYPE = 'ASSET_REGISTERED';
+    public const string TYPE = 'ASSET_REGISTERED';
 
     private function __construct(
         string $id,

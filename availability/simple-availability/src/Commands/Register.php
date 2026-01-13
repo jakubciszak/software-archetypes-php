@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class Register implements Command
 {
-    public const TYPE = 'REGISTER';
+    public const string TYPE = 'REGISTER';
 
     public function __construct(
         public string $assetId

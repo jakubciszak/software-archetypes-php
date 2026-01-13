@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class LockIndefinitely implements Command
 {
-    public const TYPE = 'LOCK_INDEFINITELY';
+    public const string TYPE = 'LOCK_INDEFINITELY';
 
     public function __construct(
         public string $assetId

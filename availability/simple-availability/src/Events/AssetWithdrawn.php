@@ -8,7 +8,7 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 
 final readonly class AssetWithdrawn extends BaseDomainEvent
 {
-    public const TYPE = 'ASSET_WITHDRAWN';
+    public const string TYPE = 'ASSET_WITHDRAWN';
 
     private function __construct(
         string $id,

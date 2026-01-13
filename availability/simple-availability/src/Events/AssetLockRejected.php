@@ -9,7 +9,7 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Domain\OwnerId;
 
 final readonly class AssetLockRejected extends BaseDomainEvent
 {
-    public const TYPE = 'ASSET_LOCK_REJECTED';
+    public const string TYPE = 'ASSET_LOCK_REJECTED';
 
     private function __construct(
         string $id,

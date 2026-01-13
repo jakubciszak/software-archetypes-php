@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class Activate implements Command
 {
-    public const TYPE = 'ACTIVATE';
+    public const string TYPE = 'ACTIVATE';
 
     public function __construct(
         public string $assetId

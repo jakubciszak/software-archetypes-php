@@ -6,7 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Commands;
 
 final readonly class Lock implements Command
 {
-    public const TYPE = 'LOCK';
+    public const string TYPE = 'LOCK';
 
     public function __construct(
         public string $assetId,
