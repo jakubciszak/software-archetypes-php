@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SoftwareArchetypes\Availability\SimpleAvailability\Domain;
 
-final readonly class WithdrawalLock implements Lock
+final class WithdrawalLock implements Lock
 {
     private static ?OwnerId $withdrawalOwnerId = null;
 

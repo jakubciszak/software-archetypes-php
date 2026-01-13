@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SoftwareArchetypes\Availability\SimpleAvailability\Domain;
 
-final readonly class MaintenanceLock implements Lock
+final class MaintenanceLock implements Lock
 {
     private static ?OwnerId $maintenanceOwnerId = null;
 
