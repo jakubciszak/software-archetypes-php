@@ -45,6 +45,9 @@ class InMemoryDomainEventsPublisher implements DomainEventsPublisher
         );
     }
 
+    /**
+     * @param class-string<DomainEvent> $eventClass
+     */
     public function hasEvent(string $eventClass): bool
     {
         return !empty($this->getEventsOfType($eventClass));

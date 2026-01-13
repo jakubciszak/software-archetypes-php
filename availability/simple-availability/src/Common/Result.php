@@ -7,8 +7,8 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Common;
 use Closure;
 
 /**
- * @template F
- * @template S
+ * @template-covariant F
+ * @template-covariant S
  */
 final readonly class Result
 {
@@ -26,20 +26,24 @@ final readonly class Result
     /**
      * @template T
      * @param T $value
-     * @return self<never, T>
+     * @return self<null, T>
+     * @phpstan-return self<never, T>
      */
     public static function success(mixed $value): self
     {
+        /** @phpstan-ignore-next-line */
         return new self($value, null, true);
     }
 
     /**
      * @template T
      * @param T $value
-     * @return self<T, never>
+     * @return self<T, null>
+     * @phpstan-return self<T, never>
      */
     public static function failure(mixed $value): self
     {
+        /** @phpstan-ignore-next-line */
         return new self(null, $value, false);
     }
 
@@ -61,6 +65,7 @@ final readonly class Result
         if (!$this->isSuccess) {
             throw new \LogicException('Cannot get success value from a failure result');
         }
+        assert($this->success !== null);
         return $this->success;
     }
 
@@ -72,6 +77,7 @@ final readonly class Result
         if ($this->isSuccess) {
             throw new \LogicException('Cannot get failure value from a success result');
         }
+        assert($this->failure !== null);
         return $this->failure;
     }
 
@@ -83,8 +89,10 @@ final readonly class Result
     public function map(Closure $mapper): self
     {
         if ($this->isSuccess) {
+            assert($this->success !== null);
             return self::success($mapper($this->success));
         }
+        /** @var self<F, T> */
         return self::failure($this->failure);
     }
 
@@ -96,8 +104,10 @@ final readonly class Result
     public function mapFailure(Closure $mapper): self
     {
         if ($this->isFailure()) {
+            assert($this->failure !== null);
             return self::failure($mapper($this->failure));
         }
+        /** @var self<T, S> */
         return self::success($this->success);
     }
 
@@ -110,8 +120,10 @@ final readonly class Result
     public function flatMap(Closure $mapper): self
     {
         if ($this->isSuccess) {
+            /** @phpstan-ignore-next-line */
             return $mapper($this->success);
         }
+        /** @var self<F|SF, SS> */
         return self::failure($this->failure);
     }
 
@@ -123,9 +135,12 @@ final readonly class Result
      */
     public function fold(Closure $successMapper, Closure $failureMapper): mixed
     {
-        return $this->isSuccess
-            ? $successMapper($this->success)
-            : $failureMapper($this->failure);
+        if ($this->isSuccess) {
+            assert($this->success !== null);
+            return $successMapper($this->success);
+        }
+        assert($this->failure !== null);
+        return $failureMapper($this->failure);
     }
 
     /**
@@ -135,6 +150,7 @@ final readonly class Result
     public function peek(Closure $action): self
     {
         if ($this->isSuccess) {
+            assert($this->success !== null);
             $action($this->success);
         }
         return $this;
@@ -156,6 +172,7 @@ final readonly class Result
     public function peekFailure(Closure $action): self
     {
         if ($this->isFailure()) {
+            assert($this->failure !== null);
             $action($this->failure);
         }
         return $this;
@@ -169,8 +186,10 @@ final readonly class Result
     public function peekBoth(Closure $successAction, Closure $failureAction): self
     {
         if ($this->isSuccess) {
+            assert($this->success !== null);
             $successAction($this->success);
         } else {
+            assert($this->failure !== null);
             $failureAction($this->failure);
         }
         return $this;
@@ -182,11 +201,15 @@ final readonly class Result
      * @param Closure(F): self<F, T> $failureMapper
      * @return self<F, T>
      */
+    /** @phpstan-ignore-next-line generics.variance */
     public function ifSuccessOrElse(Closure $successMapper, Closure $failureMapper): self
     {
         if ($this->isSuccess) {
+            assert($this->success !== null);
             return self::success($successMapper($this->success));
         }
+        assert($this->failure !== null);
+        /** @phpstan-ignore-next-line */
         return $failureMapper($this->failure);
     }
 
@@ -199,8 +222,11 @@ final readonly class Result
      */
     public function biMap(Closure $successMapper, Closure $failureMapper): self
     {
-        return $this->isSuccess
-            ? self::success($successMapper($this->success))
-            : self::failure($failureMapper($this->failure));
+        if ($this->isSuccess) {
+            assert($this->success !== null);
+            return self::success($successMapper($this->success));
+        }
+        assert($this->failure !== null);
+        return self::failure($failureMapper($this->failure));
     }
 }

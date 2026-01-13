@@ -12,8 +12,17 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailability;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailabilityRepository;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\OwnerId;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetActivated;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetActivationRejected;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetLocked;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetLockRejected;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetRegistered;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetRegistrationRejected;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetUnlocked;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetUnlockingRejected;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetWithdrawalRejected;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetWithdrawn;
+use SoftwareArchetypes\Availability\SimpleAvailability\Events\DomainEvent;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\DomainEventsPublisher;
 
 class AvailabilityService
@@ -45,6 +54,9 @@ class AvailabilityService
         return Result::success($event);
     }
 
+    /**
+     * @return Result<string|AssetActivationRejected, AssetActivated>
+     */
     public function activate(AssetId $assetId): Result
     {
         $assetAvailability = $this->repository->findById($assetId);
@@ -58,6 +70,9 @@ class AvailabilityService
         return $result;
     }
 
+    /**
+     * @return Result<string|AssetWithdrawalRejected, AssetWithdrawn>
+     */
     public function withdraw(AssetId $assetId): Result
     {
         $assetAvailability = $this->repository->findById($assetId);
@@ -71,6 +86,9 @@ class AvailabilityService
         return $result;
     }
 
+    /**
+     * @return Result<string|AssetLockRejected, AssetLocked>
+     */
     public function lock(AssetId $assetId, OwnerId $ownerId, DateInterval $duration): Result
     {
         $assetAvailability = $this->repository->findById($assetId);
@@ -84,6 +102,9 @@ class AvailabilityService
         return $result;
     }
 
+    /**
+     * @return Result<string|AssetLockRejected, AssetLocked>
+     */
     public function lockIndefinitely(AssetId $assetId, OwnerId $ownerId): Result
     {
         $assetAvailability = $this->repository->findById($assetId);
@@ -97,6 +118,9 @@ class AvailabilityService
         return $result;
     }
 
+    /**
+     * @return Result<string|AssetUnlockingRejected, AssetUnlocked>
+     */
     public function unlock(AssetId $assetId, OwnerId $ownerId, DateTimeImmutable $at): Result
     {
         $assetAvailability = $this->repository->findById($assetId);
@@ -124,12 +148,15 @@ class AvailabilityService
         }
     }
 
+    /**
+     * @param Result<DomainEvent, DomainEvent> $result
+     */
     private function handle(AssetAvailability $assetAvailability, Result $result): void
     {
         $this->repository->save($assetAvailability);
         $result->peekBoth(
-            fn($event) => $this->eventsPublisher->publish($event),
-            fn($event) => $this->eventsPublisher->publish($event)
+            fn(DomainEvent $event) => $this->eventsPublisher->publish($event),
+            fn(DomainEvent $event) => $this->eventsPublisher->publish($event)
         );
     }
 }
