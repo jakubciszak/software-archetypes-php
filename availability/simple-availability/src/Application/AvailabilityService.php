@@ -6,6 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Application;
 
 use DateInterval;
 use DateTimeImmutable;
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\Clock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Common\Result;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailability;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailabilityRepository;
@@ -19,7 +20,8 @@ class AvailabilityService
 {
     public function __construct(
         private readonly AssetAvailabilityRepository $repository,
-        private readonly DomainEventsPublisher $eventsPublisher
+        private readonly DomainEventsPublisher $eventsPublisher,
+        private readonly Clock $clock
     ) {
     }
 
@@ -34,7 +36,7 @@ class AvailabilityService
             return Result::failure($event);
         }
 
-        $assetAvailability = AssetAvailability::of($assetId);
+        $assetAvailability = AssetAvailability::of($assetId, $this->clock);
         $this->repository->save($assetAvailability);
 
         $event = AssetRegistered::from($assetId);

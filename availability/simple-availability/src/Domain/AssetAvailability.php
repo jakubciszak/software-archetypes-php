@@ -6,6 +6,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Domain;
 
 use DateInterval;
 use DateTimeImmutable;
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\Clock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Common\Result;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetActivated;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetActivationRejected;
@@ -28,14 +29,15 @@ class AssetAvailability
     private ?Lock $currentLock;
 
     private function __construct(
-        private readonly AssetId $assetId
+        private readonly AssetId $assetId,
+        private readonly Clock $clock
     ) {
         $this->currentLock = new MaintenanceLock();
     }
 
-    public static function of(AssetId $assetId): self
+    public static function of(AssetId $assetId, Clock $clock): self
     {
-        return new self($assetId);
+        return new self($assetId, $clock);
     }
 
     /**
@@ -72,7 +74,7 @@ class AssetAvailability
     public function lockFor(OwnerId $ownerId, DateInterval $time): Result
     {
         if ($this->currentLock === null) {
-            $now = new DateTimeImmutable();
+            $now = $this->clock->now();
             $validUntil = $now->add($time);
             $this->currentLock = new OwnerLock($ownerId, $validUntil);
             return Result::success(
@@ -90,7 +92,7 @@ class AssetAvailability
     public function lockIndefinitelyFor(OwnerId $ownerId): Result
     {
         if ($this->thereIsAnActiveLockFor($ownerId)) {
-            $now = new DateTimeImmutable();
+            $now = $this->clock->now();
             $validUntil = $now->add(new DateInterval('P' . self::INDEFINITE_LOCK_DAYS . 'D'));
             $this->currentLock = new OwnerLock($ownerId, $validUntil);
             return Result::success(

@@ -31,8 +31,11 @@ abstract readonly class BaseDomainEvent implements DomainEvent
         return bin2hex(random_bytes(16));
     }
 
-    protected static function now(): DateTimeImmutable
+    protected static function now(?\SoftwareArchetypes\Availability\SimpleAvailability\Common\Clock $clock = null): DateTimeImmutable
     {
-        return new DateTimeImmutable();
+        if ($clock === null) {
+            return new DateTimeImmutable();
+        }
+        return $clock->now();
     }
 }

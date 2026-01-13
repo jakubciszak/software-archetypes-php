@@ -8,6 +8,8 @@ use DateInterval;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SoftwareArchetypes\Availability\SimpleAvailability\Application\AvailabilityService;
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\Clock;
+use SoftwareArchetypes\Availability\SimpleAvailability\Tests\Support\MockClock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\OwnerId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Infrastructure\EventPublisher\InMemoryDomainEventsPublisher;
@@ -23,17 +25,24 @@ class AvailabilityServiceIntegrationTest extends TestCase
 
     private AvailabilityService $service;
     private InMemoryAssetAvailabilityRepository $repository;
+    private MockClock $clock;
 
     protected function setUp(): void
     {
         $this->repository = new InMemoryAssetAvailabilityRepository();
         $this->setupEventPublisher();
-        $this->service = new AvailabilityService($this->repository, $this->eventPublisher);
+        $this->clock = new MockClock();
+        $this->service = new AvailabilityService($this->repository, $this->eventPublisher, $this->clock);
     }
 
     protected function getRepository(): InMemoryAssetAvailabilityRepository
     {
         return $this->repository;
+    }
+
+    protected function getClock(): Clock
+    {
+        return $this->clock;
     }
 
     // REGISTRATION TESTS

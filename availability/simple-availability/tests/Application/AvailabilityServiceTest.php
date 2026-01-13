@@ -8,6 +8,7 @@ use DateInterval;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SoftwareArchetypes\Availability\SimpleAvailability\Application\AvailabilityService;
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\SystemClock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\OwnerId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Events\AssetActivated;
@@ -29,7 +30,7 @@ class AvailabilityServiceTest extends TestCase
     {
         $this->repository = new InMemoryAssetAvailabilityRepository();
         $this->eventsPublisher = new InMemoryDomainEventsPublisher();
-        $this->service = new AvailabilityService($this->repository, $this->eventsPublisher);
+        $this->service = new AvailabilityService($this->repository, $this->eventsPublisher, new SystemClock());
     }
 
     public function testCanRegisterNewAsset(): void

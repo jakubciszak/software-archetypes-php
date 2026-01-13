@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SoftwareArchetypes\Availability\SimpleAvailability\Tests\Support;
 
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\Clock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailability;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailabilityRepository;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
@@ -15,17 +16,18 @@ use SoftwareArchetypes\Availability\SimpleAvailability\Tests\Fixtures\AssetAvail
 trait AssetAvailabilityStoreSupport
 {
     abstract protected function getRepository(): AssetAvailabilityRepository;
+    abstract protected function getClock(): Clock;
 
     protected function existingAsset(): AssetAvailability
     {
-        $asset = AssetAvailabilityFixture::someNewAsset();
+        $asset = AssetAvailabilityFixture::someNewAsset($this->getClock());
         $this->getRepository()->save($asset);
         return $asset;
     }
 
     protected function activatedAsset(): AssetAvailability
     {
-        $asset = AssetAvailabilityFixture::create()
+        $asset = AssetAvailabilityFixture::create($this->getClock())
             ->thatIsActive()
             ->get();
         $this->getRepository()->save($asset);
@@ -34,7 +36,7 @@ trait AssetAvailabilityStoreSupport
 
     protected function assetLockedBy(OwnerId $ownerId): AssetAvailability
     {
-        $asset = AssetAvailabilityFixture::create()
+        $asset = AssetAvailabilityFixture::create($this->getClock())
             ->thatIsActive()
             ->thatWasLockedByOwnerWith($ownerId)
             ->forSomeValidDuration()
@@ -45,7 +47,7 @@ trait AssetAvailabilityStoreSupport
 
     protected function lockedAsset(): AssetAvailability
     {
-        $asset = AssetAvailabilityFixture::create()
+        $asset = AssetAvailabilityFixture::create($this->getClock())
             ->thatIsActive()
             ->thatWasLockedBySomeOwner()
             ->forSomeValidDuration()

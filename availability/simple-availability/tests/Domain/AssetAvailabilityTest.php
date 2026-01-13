@@ -7,6 +7,7 @@ namespace SoftwareArchetypes\Availability\SimpleAvailability\Tests\Domain;
 use DateInterval;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use SoftwareArchetypes\Availability\SimpleAvailability\Common\SystemClock;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetAvailability;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\AssetId;
 use SoftwareArchetypes\Availability\SimpleAvailability\Domain\MaintenanceLock;
@@ -35,7 +36,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testNewAssetHasMaintenanceLock(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
 
         $lock = $asset->currentLock();
         $this->assertInstanceOf(MaintenanceLock::class, $lock);
@@ -43,7 +44,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCanActivateAssetWithMaintenanceLock(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
 
         $result = $asset->activate();
 
@@ -54,7 +55,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCannotActivateAlreadyActivatedAsset(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
 
         $result = $asset->activate();
@@ -65,7 +66,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCanWithdrawAvailableAsset(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
 
         $result = $asset->withdraw();
@@ -77,7 +78,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCannotWithdrawLockedAsset(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -89,7 +90,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCanLockAvailableAsset(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
 
         $result = $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
@@ -101,7 +102,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCannotLockAlreadyLockedAsset(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -114,7 +115,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCanLockIndefinitelyForExistingOwner(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -126,7 +127,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCannotLockIndefinitelyWithoutExistingLock(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
 
         $result = $asset->lockIndefinitelyFor($this->ownerId);
@@ -137,7 +138,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCanUnlockAssetByOwner(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -150,7 +151,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testCannotUnlockAssetByDifferentOwner(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -163,7 +164,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testUnlockIfOverdueRemovesOwnerLock(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
         $asset->lockFor($this->ownerId, new DateInterval('PT30M'));
 
@@ -175,7 +176,7 @@ class AssetAvailabilityTest extends TestCase
 
     public function testUnlockIfOverdueReturnsNullWhenNoOwnerLock(): void
     {
-        $asset = AssetAvailability::of($this->assetId);
+        $asset = AssetAvailability::of($this->assetId, new SystemClock());
         $asset->activate();
 
         $event = $asset->unlockIfOverdue();
